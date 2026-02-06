@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: dailyread-postgres
+    environment:
+      POSTGRES_USER: dailyread
+      POSTGRES_PASSWORD: dailyread
+      POSTGRES_DB: dailyread
+    ports:
+      - "5432:5432"
+    volumes:
+      - dailyread_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dailyread -d dailyread"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  dailyread_postgres_data:
