@@ -1,5 +1,9 @@
 # PR: Bootstrap MVP Environment (Next.js + Fastify + Prisma/PostgreSQL + Podman)
 
+## Branches
+- Base: `develop`
+- Compare: `feat/bootstrap-next-fastify-prisma-podman`
+
 ## Summary
 Initialize DailyRead MVP development baseline with web/api workspace split, database schema foundation, and local runtime validation.
 

@@ -10,12 +10,12 @@ Turn local changes into review-ready commits and a technically clear PR body.
 
 ## Inputs
 - Current working tree changes
-- Target base branch
+- Target base branch (default: `develop`)
 - Requested scope boundaries
 
 ## Workflow
 1. Verify repository status and identify generated artifacts to exclude.
-2. Create or switch to base branch, then create a feature branch with a descriptive name.
+2. Create or switch to base branch, then create a feature branch using conventional format.
 3. Group files by concern (scaffold, data layer, docs/process) and stage each group separately.
 4. Commit each group with imperative conventional messages.
 5. Prepare PR notes with:
@@ -24,6 +24,15 @@ Turn local changes into review-ready commits and a technically clear PR body.
 - Validation evidence
 - Known gaps and follow-up items
 6. Push feature branch and open PR against base branch.
+
+## Branch Naming Convention
+- Use `<type>/<scope>` format.
+- Allowed `type`: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`.
+- Keep `scope` short, lowercase, hyphen-separated.
+- Examples:
+  - `feat/bootstrap-next-fastify-prisma-podman`
+  - `chore/update-ci-cache`
+  - `fix/subscription-upsert-error`
 
 ## Commit Grouping Rules
 - Keep one concern per commit.
@@ -34,6 +43,7 @@ Turn local changes into review-ready commits and a technically clear PR body.
   3. docs/process updates
 
 ## PR Body Checklist
+- Base branch and compare branch explicitly noted
 - Scope and non-scope
 - Architecture or model changes
 - Environment/runtime assumptions
