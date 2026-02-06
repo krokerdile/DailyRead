@@ -1,0 +1,17 @@
+{
+  "name": "dailyread",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev -w @dailyread/web",
+    "dev:api": "npm run dev -w @dailyread/api",
+    "build": "npm run build -ws",
+    "typecheck": "npm run typecheck -ws"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
