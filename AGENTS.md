@@ -27,3 +27,7 @@ Use `git-pr-delivery-flow` skill for requests about:
 - branch strategy
 - split commits
 - technical PR description and submission workflow
+
+## Language Preference
+- 기본 문서화/요약/PR 설명은 한글로 작성한다.
+- 브랜치/커밋 타입 접두어(`feat`, `fix`, `chore`, `docs`)는 표준 포맷을 유지한다.

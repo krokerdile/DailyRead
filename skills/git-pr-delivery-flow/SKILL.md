@@ -8,6 +8,11 @@ description: Standardize branch, commit, and pull request execution for DailyRea
 ## Objective
 Turn local changes into review-ready commits and a technically clear PR body.
 
+## Output Language
+- Write PR title/body, change summary, and review notes in Korean by default.
+- Keep branch and commit type prefixes in conventional English format (`feat`, `fix`, `chore`, `docs`, etc.).
+- Switch to English only when the user explicitly requests English.
+
 ## Inputs
 - Current working tree changes
 - Target base branch (default: `develop`)
