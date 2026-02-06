@@ -1,11 +1,11 @@
 # PR: MVP 환경 부트스트랩 (Next.js + Fastify + Prisma/PostgreSQL + Podman)
 
 ## 브랜치
-- Base: `develop`
-- Compare: `feat/bootstrap-next-fastify-prisma-podman`
+- 기준 브랜치: `develop`
+- 작업 브랜치: `feat/bootstrap-next-fastify-prisma-podman`
 
 ## 요약
-DailyRead MVP 개발을 시작할 수 있도록 웹/API 워크스페이스 분리, 데이터베이스 기초 스키마, 로컬 실행 검증 환경을 초기화했습니다.
+DailyRead MVP 개발 시작을 위해 웹/API 워크스페이스 분리, 데이터베이스 기초 스키마, 로컬 실행 검증 환경을 초기화했습니다.
 
 ## 범위
 - 웹, API, 공용 이메일 패키지 모노레포 스캐폴딩 추가

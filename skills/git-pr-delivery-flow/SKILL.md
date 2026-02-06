@@ -15,7 +15,7 @@ Turn local changes into review-ready commits and a technically clear PR body.
 
 ## Inputs
 - Current working tree changes
-- Target base branch (default: `develop`)
+- Target base branch (default: `develop`, release target: `main`)
 - Requested scope boundaries
 
 ## Workflow
@@ -29,6 +29,12 @@ Turn local changes into review-ready commits and a technically clear PR body.
 - Validation evidence
 - Known gaps and follow-up items
 6. Push feature branch and open PR against base branch.
+
+## Branch Strategy
+- Use `main <- develop <- feature/*` as the default flow.
+- Open feature PRs to `develop`.
+- After feature integration, open `develop -> main` PR for release sync.
+- Do not use `master`; use `main` as the primary branch name.
 
 ## Branch Naming Convention
 - Use `<type>/<scope>` format.
@@ -59,3 +65,4 @@ Turn local changes into review-ready commits and a technically clear PR body.
 - Never rewrite unrelated files.
 - Do not commit secrets (`.env`, credentials, private tokens).
 - If remote/push/PR command fails, record exact blocker and provide retry commands.
+- If `gh` auth is invalid but `git push` works, continue with push-first workflow and create/edit PR with available auth path.
