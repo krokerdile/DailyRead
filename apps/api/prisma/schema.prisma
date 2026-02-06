@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Group {
+  id          String       @id @default(cuid())
+  name        String
+  slug        String       @unique
+  isSystem    Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  subscribers Subscriber[]
+  users       User[]
+}
+
+model Subscriber {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  subscribedAt DateTime   @default(now())
+  isActive     Boolean    @default(true)
+  groupId      String
+  group        Group      @relation(fields: [groupId], references: [id])
+  emailLogs    EmailLog[]
+}
+
+model User {
+  id              String           @id @default(cuid())
+  githubId        String           @unique
+  username        String
+  avatarUrl       String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  groupId         String
+  group           Group            @relation(fields: [groupId], references: [id])
+  likes           Like[]
+  comments        Comment[]
+  recommendations Recommendation[]
+}
+
+model Blog {
+  id            String   @id @default(cuid())
+  name          String
+  siteUrl       String
+  rssUrl        String   @unique
+  isActive      Boolean  @default(true)
+  lastFetchedAt DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  posts         Post[]
+}
+
+model Post {
+  id              String           @id @default(cuid())
+  title           String
+  url             String           @unique
+  summary         String?
+  publishedAt     DateTime
+  fetchedAt       DateTime         @default(now())
+  viewCount       Int              @default(0)
+  blogId          String
+  blog            Blog             @relation(fields: [blogId], references: [id])
+  likes           Like[]
+  comments        Comment[]
+  recommendations Recommendation[]
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  userId    String
+  postId    String
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  postId    String
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+}
+
+model Recommendation {
+  id          String   @id @default(cuid())
+  url         String
+  title       String?
+  description String?
+  createdAt   DateTime @default(now())
+  userId      String
+  postId      String?
+  user        User     @relation(fields: [userId], references: [id])
+  post        Post?    @relation(fields: [postId], references: [id])
+}
+
+model EmailLog {
+  id           String     @id @default(cuid())
+  subject      String
+  provider     String
+  messageId    String?
+  status       EmailStatus
+  errorMessage String?
+  sentAt       DateTime   @default(now())
+  subscriberId String
+  subscriber   Subscriber @relation(fields: [subscriberId], references: [id])
+}
+
+enum EmailStatus {
+  SENT
+  FAILED
+}
