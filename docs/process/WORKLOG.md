@@ -13,6 +13,20 @@ Keep entries in reverse chronological order.
 
 ---
 
+## 2026-02-07 03:51 KST - PR-002
+- Goal: 2번째 PR 본문/코멘트 Markdown 깨짐(`\n` 노출) 이슈 수정 및 재발 방지.
+- Changes:
+  - `docs/process/PR_RELEASE_001.md` 추가 (develop -> main PR 본문 파일).
+  - `skills/git-pr-delivery-flow/SKILL.md`에 Markdown body guard 추가.
+  - PR 본문 전달 방식을 문자열 이스케이프가 아닌 `--body-file` 기준으로 정리.
+- Decision/Tradeoff:
+  - 빠른 복붙보다 파일 기반 본문 관리(추적성/재사용성)를 우선.
+- Validation:
+  - PR 본문 파일에서 줄바꿈/헤더/리스트가 일반 Markdown 형식으로 작성됨을 확인.
+  - 스킬 문서에 `gh pr create/edit --body-file` 규칙이 반영됨을 확인.
+- Next Step:
+  - `gh pr edit <번호> --body-file docs/process/PR_RELEASE_001.md`로 실제 PR 본문 교체.
+
 ## 2026-02-07 03:15 KST - ENV-001
 - Goal: Establish MVP-ready local development environment (web/api/db/email) and verify runtime.
 - Changes:

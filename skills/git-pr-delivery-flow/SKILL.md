@@ -61,6 +61,11 @@ Turn local changes into review-ready commits and a technically clear PR body.
 - Validation commands and results
 - Risks, rollback, and next steps
 
+## Markdown Body Guard
+- Never pass PR body as a single escaped string containing `\n`.
+- Prefer `gh pr create --body-file <path>` or `gh pr edit --body-file <path>`.
+- Keep PR text in a markdown file under `docs/process/` for auditability.
+
 ## Guardrails
 - Never rewrite unrelated files.
 - Do not commit secrets (`.env`, credentials, private tokens).
