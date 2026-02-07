@@ -15,6 +15,14 @@ export type RegisterBlogResult = {
   createdPostCount: number;
 };
 
+export type RefreshBlogsResult = {
+  processedCount: number;
+  successCount: number;
+  failureCount: number;
+  createdPostCount: number;
+  failures: Array<{ blogId: string; rssUrl: string; error: string }>;
+};
+
 export async function registerAndIngestBlog(
   prisma: PrismaClient,
   input: RegisterBlogInput
@@ -94,6 +102,46 @@ export async function registerAndIngestBlog(
     await recordFailure(prisma, input.url, rssUrl, blogId, error);
     throw error;
   }
+}
+
+export async function refreshRegisteredBlogs(
+  prisma: PrismaClient,
+  limit?: number
+): Promise<RefreshBlogsResult> {
+  const blogs = await prisma.blog.findMany({
+    where: { isActive: true },
+    orderBy: { updatedAt: "desc" },
+    take: limit
+  });
+
+  let successCount = 0;
+  let createdPostCount = 0;
+  const failures: Array<{ blogId: string; rssUrl: string; error: string }> = [];
+
+  for (const blog of blogs) {
+    try {
+      const result = await registerAndIngestBlog(prisma, {
+        url: blog.rssUrl,
+        name: blog.name
+      });
+      successCount += 1;
+      createdPostCount += result.createdPostCount;
+    } catch (error) {
+      failures.push({
+        blogId: blog.id,
+        rssUrl: blog.rssUrl,
+        error: getErrorMessage(error)
+      });
+    }
+  }
+
+  return {
+    processedCount: blogs.length,
+    successCount,
+    failureCount: failures.length,
+    createdPostCount,
+    failures
+  };
 }
 
 async function recordFailure(
