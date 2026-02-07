@@ -13,6 +13,26 @@ Keep entries in reverse chronological order.
 
 ---
 
+## 2026-02-07 12:17 KST - RSS-003
+- Goal: 등록 블로그 주기 재수집 스케줄러를 추가하고 최신 테스트 글 수집 여부 확인.
+- Changes:
+  - 환경변수 스키마 확장: `RSS_REFRESH_SCHEDULER_ENABLED`, `RSS_REFRESH_INTERVAL_MINUTES`, `RSS_REFRESH_BATCH_LIMIT`, `RSS_REFRESH_RUN_ON_START` (`apps/api/src/config/env.ts`).
+  - RSS 스케줄러 모듈 추가 (`apps/api/src/rss/scheduler.ts`).
+  - API bootstrap에 스케줄러 시작/정지 연결 (`apps/api/src/index.ts`).
+  - `.env.example`에 스케줄러 관련 변수 추가.
+- Decision/Tradeoff:
+  - MVP 단계에서는 단일 인스턴스 전제 타이머 기반 스케줄러로 단순하게 구현.
+  - 중복 실행 방지를 위해 이전 실행 중이면 다음 주기 실행을 skip 처리.
+- Validation:
+  - 성공: `./node_modules/.bin/tsc --noEmit -p apps/api/tsconfig.json`
+  - 성공: `RSS_REFRESH_SCHEDULER_ENABLED=true RSS_REFRESH_RUN_ON_START=true` 실행 시 startup 트리거 로그 확인
+  - 성공: startup 실행 결과 `createdPostCount: 1` 확인
+  - 성공: DB 조회에서 제목 `"테스트 용"` 적재 확인  
+    - `title: 테스트 용`  
+    - `url: https://jacky0831.tistory.com/138`
+- Next Step:
+  - 멀티 인스턴스 환경 대비 분산 락/잡큐 기반 스케줄러로 확장 검토.
+
 ## 2026-02-07 12:07 KST - RSS-002
 - Goal: 등록된 블로그를 한 번에 다시 수집할 수 있는 수동 일괄 재수집 엔드포인트 추가.
 - Changes:
