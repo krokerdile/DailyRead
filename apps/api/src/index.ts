@@ -4,6 +4,7 @@ import { env } from "./config/env.js";
 import { prisma } from "./db/client.js";
 import { createEmailSender } from "./email/provider.js";
 import { registerHealthRoute } from "./routes/health.js";
+import { registerBlogRoutes } from "./routes/blogs.js";
 import { registerSubscriptionRoutes } from "./routes/subscriptions.js";
 
 const app = Fastify({ logger: true });
@@ -14,6 +15,7 @@ await app.register(cors, {
 
 await registerHealthRoute(app);
 await registerSubscriptionRoutes(app);
+await registerBlogRoutes(app);
 
 const emailSender = createEmailSender();
 app.decorate("emailSender", emailSender);

@@ -52,6 +52,7 @@ model Blog {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   posts         Post[]
+  fetchLogs     RssFetchLog[]
 }
 
 model Post {
@@ -115,7 +116,24 @@ model EmailLog {
   subscriber   Subscriber @relation(fields: [subscriberId], references: [id])
 }
 
+model RssFetchLog {
+  id             String         @id @default(cuid())
+  requestedUrl   String
+  resolvedRssUrl String?
+  status         RssFetchStatus
+  itemCount      Int            @default(0)
+  errorMessage   String?
+  fetchedAt      DateTime       @default(now())
+  blogId         String?
+  blog           Blog?          @relation(fields: [blogId], references: [id])
+}
+
 enum EmailStatus {
   SENT
+  FAILED
+}
+
+enum RssFetchStatus {
+  SUCCESS
   FAILED
 }
