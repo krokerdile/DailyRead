@@ -13,6 +13,23 @@ Keep entries in reverse chronological order.
 
 ---
 
+## 2026-02-07 12:32 KST - RSS-004
+- Goal: RSS 수집 결과를 운영 관점에서 바로 확인할 수 있는 로그 조회 API 추가.
+- Changes:
+  - `docs/tasks/TASK-RSS-004.md` 생성.
+  - `GET /blogs/fetch-logs` 라우트 추가 (`apps/api/src/routes/blogs.ts`).
+  - 쿼리 필터 추가: `status(SUCCESS|FAILED)`, `limit(기본 20, 최대 100)`.
+  - 로그 응답에 연결된 blog 기본 정보(id/name/rssUrl) 포함.
+- Decision/Tradeoff:
+  - MVP 운영 편의성을 위해 인증 없이 조회 경로를 우선 제공.
+  - 보안/권한 제어는 후속 태스크로 분리.
+- Validation:
+  - 성공: `./node_modules/.bin/tsc --noEmit -p apps/api/tsconfig.json`
+  - 성공: `GET /blogs/fetch-logs?limit=3` 응답 확인
+  - 성공: `GET /blogs/fetch-logs?status=FAILED&limit=3` 필터 응답 확인
+- Next Step:
+  - 관리자 인증 추가 후 운영자 전용으로 로그 조회 범위 제한.
+
 ## 2026-02-07 12:17 KST - RSS-003
 - Goal: 등록 블로그 주기 재수집 스케줄러를 추가하고 최신 테스트 글 수집 여부 확인.
 - Changes:

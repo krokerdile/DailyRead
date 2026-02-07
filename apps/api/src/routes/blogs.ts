@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import { RssFetchStatus } from "@prisma/client";
 import { z } from "zod";
 import { refreshRegisteredBlogs, registerAndIngestBlog } from "../rss/ingest.js";
 
@@ -11,7 +12,47 @@ const refreshBlogsSchema = z.object({
   limit: z.number().int().min(1).max(100).optional()
 });
 
+const fetchLogsQuerySchema = z.object({
+  status: z.nativeEnum(RssFetchStatus).optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(20)
+});
+
 export async function registerBlogRoutes(app: FastifyInstance): Promise<void> {
+  app.get("/blogs/fetch-logs", async (request, reply) => {
+    const parsed = fetchLogsQuerySchema.safeParse(request.query ?? {});
+
+    if (!parsed.success) {
+      return reply.status(400).send({
+        message: "Invalid logs query",
+        issues: parsed.error.issues
+      });
+    }
+
+    const logs = await app.prisma.rssFetchLog.findMany({
+      where: {
+        status: parsed.data.status
+      },
+      orderBy: {
+        fetchedAt: "desc"
+      },
+      take: parsed.data.limit,
+      include: {
+        blog: {
+          select: {
+            id: true,
+            name: true,
+            rssUrl: true
+          }
+        }
+      }
+    });
+
+    return reply.status(200).send({
+      count: logs.length,
+      logs
+    });
+  });
+
   app.post("/blogs/register", async (request, reply) => {
     const parsed = registerBlogSchema.safeParse(request.body);
 
