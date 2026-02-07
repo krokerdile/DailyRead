@@ -13,6 +13,22 @@ Keep entries in reverse chronological order.
 
 ---
 
+## 2026-02-07 12:07 KST - RSS-002
+- Goal: 등록된 블로그를 한 번에 다시 수집할 수 있는 수동 일괄 재수집 엔드포인트 추가.
+- Changes:
+  - `docs/tasks/TASK-RSS-002.md` 생성.
+  - RSS 수집 서비스에 `refreshRegisteredBlogs` 추가 (`apps/api/src/rss/ingest.ts`).
+  - `POST /blogs/refresh` 라우트 추가 및 `limit` 입력 검증 추가 (`apps/api/src/routes/blogs.ts`).
+- Decision/Tradeoff:
+  - 처리 안정성을 위해 MVP 단계에서는 활성 블로그를 순차 처리.
+  - 개별 블로그 실패가 전체 실행을 중단하지 않도록 실패 수집 후 계속 진행.
+- Validation:
+  - 성공: `./node_modules/.bin/tsc --noEmit -p apps/api/tsconfig.json`
+  - 성공: `POST /blogs/refresh {}` -> `processedCount: 1, successCount: 1, failureCount: 0, createdPostCount: 0`
+  - 성공: `RssFetchLog` 최신 로그에 SUCCESS 추가 확인
+- Next Step:
+  - 주기 수집(cron/queue)과 재시도 정책은 후속 태스크로 분리 구현.
+
 ## 2026-02-07 11:59 KST - RSS-001
 - Goal: 실사용 RSS URL(`jacky0831.tistory.com`) 기준 등록/수집 실검증 및 자동 발견 실패 보완.
 - Changes:
